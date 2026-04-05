@@ -9,10 +9,24 @@ import Notification from './components/Notification';
 import { Link, Element, animateScroll as scroll } from 'react-scroll'
 import axios from './utils/axios';
 
-/** Con `VITE_API_URL` (ej. Render) usa `/emails/contact`; en Netlify, función serverless directa. */
-const CONTACT_POST_PATH = import.meta.env.VITE_API_URL
-  ? '/emails/contact'
-  : '/.netlify/functions/send-email';
+/**
+ * Render / API externo: `VITE_API_URL` apunta a otro origen → POST `/emails/contact`.
+ * Netlify (o mismo sitio): siempre `/.netlify/functions/send-email` aunque exista `VITE_API_URL` en el panel.
+ */
+function getContactPostPath() {
+  const base = import.meta.env.VITE_API_URL?.trim() ?? '';
+  if (!base) return '/.netlify/functions/send-email';
+  if (typeof window === 'undefined') return '/.netlify/functions/send-email';
+  try {
+    const apiOrigin = new URL(base).origin;
+    if (apiOrigin === window.location.origin) {
+      return '/.netlify/functions/send-email';
+    }
+  } catch {
+    return '/.netlify/functions/send-email';
+  }
+  return '/emails/contact';
+}
 
 function App() {
 
@@ -24,7 +38,7 @@ function App() {
 
   const submit = data => {
     setIsLoading(true);
-    axios.post(CONTACT_POST_PATH, data)
+    axios.post(getContactPostPath(), data)
       .then(() => setNotification({ show: true, variant: "success", message: "Message sent!" }))
       .catch(() => setNotification({ show: true, variant: "danger", message: "There was an error" }))
       .finally(() => setIsLoading(false));
