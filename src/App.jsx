@@ -9,6 +9,11 @@ import Notification from './components/Notification';
 import { Link, Element, animateScroll as scroll } from 'react-scroll'
 import axios from './utils/axios';
 
+/** Con `VITE_API_URL` (ej. Render) usa `/emails/contact`; en Netlify, función serverless directa. */
+const CONTACT_POST_PATH = import.meta.env.VITE_API_URL
+  ? '/emails/contact'
+  : '/.netlify/functions/send-email';
+
 function App() {
 
   const [isOpen, setIsOpen] = useState(false)
@@ -19,7 +24,7 @@ function App() {
 
   const submit = data => {
     setIsLoading(true);
-    axios.post('/emails/contact', data)
+    axios.post(CONTACT_POST_PATH, data)
       .then(() => setNotification({ show: true, variant: "success", message: "Message sent!" }))
       .catch(() => setNotification({ show: true, variant: "danger", message: "There was an error" }))
       .finally(() => setIsLoading(false));
