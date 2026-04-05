@@ -1,9 +1,20 @@
 [build]
-  publish = "dist"
   command = "npm run build"
+  publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Mantiene el mismo path que el front (axios.post('/emails/contact')).
+[[redirects]]
+  from = "/emails/contact"
+  to = "/.netlify/functions/send-email"
+  status = 200
+  force = true
+
+# SPA (React + Vite): debe ir después de rutas específicas.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-

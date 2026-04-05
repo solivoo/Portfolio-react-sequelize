@@ -6,13 +6,8 @@ import './start.js'
 import './components/styles/loading-screen.css'
 import LoadingScreen from './components/LoadingScreen';
 import Notification from './components/Notification';
-import { Link, Button, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import { Link, Element, animateScroll as scroll } from 'react-scroll'
 import axios from './utils/axios';
-
-
-
-
-
 
 function App() {
 
@@ -49,6 +44,11 @@ function App() {
     scroll.scrollToTop();
   }
 
+  //funcion que retorna el año actual
+  const getCurrentYear = () => {
+    return new Date().getFullYear();
+  }
+
 
   return (
     <>
@@ -56,7 +56,22 @@ function App() {
                     
         <div className="app_header">
           <div className="nav_container">
-            <Link onClick={scrollToTop} spy={true} smooth={true} offset={-70} duration={500}><h1 className='app_logo' style={{ cursor: "pointer" }}>.oS</h1></Link>
+            <h1
+              className='app_logo'
+              style={{ cursor: 'pointer' }}
+              onClick={scrollToTop}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  scrollToTop();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={languaje ? 'Volver arriba' : 'Back to top'}
+            >
+              .oS
+            </h1>
             <div className="app_menu">
               <ul className='app_ul'>
                 <li className='app_li'><Link className='app_li' to="aboutMe" activeClass="active" spy={false} smooth={true} duration={500} offset={-70}> {languaje ? 'Acerca de mi' : 'About me'} </Link></li>
@@ -241,7 +256,7 @@ function App() {
           <Element className="academic" name="academic"><h3><span className='title_mq'>&lt;</span>{languaje ? 'Academico' : 'Academic'}<span className='title_mq'>&gt;</span></h3></Element>
           <div className="certificate_container">
             <div className="certificate">
-              <a className="link_certificate" target="_blank" href="https://certificates.academlo.com/en/verify/17035174719055">
+              <a className="link_certificate" target="_blank" rel="noopener noreferrer" href="https://certificates.academlo.com/en/verify/17035174719055">
                 <img className="certificate_img" src="https://verified-bucket.s3.eu-central-1.amazonaws.com/cert/17035174719055.png" alt="" />
               </a>
             </div>
@@ -313,23 +328,23 @@ function App() {
             <div className="elements">
               <div className="items">
                 <i className='bx bxl-github img_contact'></i>
-                <a className='link_footer' target="_blank"
-                  href="https://github.com/HitsoKeyco">https://github.com/HitsoKeyco</a>
+                <a className='link_footer' target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/HitsoKeyco">https://github.com/solivo</a>
               </div>
               <div className="items">
                 <i className='bx bxl-linkedin-square img_contact'></i>
-                <a className='link_footer' target="_blank"
+                <a className='link_footer' target="_blank" rel="noopener noreferrer"
                   href="https://www.linkedin.com/in/sergiolivo/">https://www.linkedin.com/in/sergiolivo/</a>
               </div>
               <div className="items">
                 <i className='bx bxl-gmail img_contact'></i>
-                <a className='link_footer' target="_blank" href="https://gmail.com">olivosergio09@gmail.com</a>
+                <a className='link_footer' target="_blank" rel="noopener noreferrer" href="https://gmail.com">olivosergio09@gmail.com</a>
               </div>
 
-              <p className='derechos'>&copy; {languaje ? 'Derechos Reservados 2023' : 'All Rights Reserved 2023'}</p>
+              <p className='derechos'>&copy; {languaje ? 'Derechos Reservados ' + getCurrentYear() : 'All Rights Reserved ' + getCurrentYear()}</p>
               
             </div>
-            <a className='link_footer' target="_blank" href="https://wa.link/tmbgbo">
+            <a className='link_footer' target="_blank" rel="noopener noreferrer" href="https://wa.link/tmbgbo">
               <img className="logoWhatsapp" src="/logoWhatsapp.svg" alt="" />
             </a>
           </article>
